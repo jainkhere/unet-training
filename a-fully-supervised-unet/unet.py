@@ -59,6 +59,7 @@ def train(model, imgs_train, imgs_mask_train, imgs_test, imgs_mask_test, model_n
 
     sname = model_name + '/weights.{epoch:02d}-{loss:.2f}.hdf5'
     model_checkpoint = ModelCheckpoint(sname, monitor='val_loss',verbose=1, save_best_only=False, save_freq=5)
+    # model_checkpoint = ModelCheckpoint(sname,verbose=1, save_best_only=False, save_freq=5)
     print('saving model checkpoints in', model_name + '/')
     
     logfile_path = model_name + '/log.txt'
@@ -166,10 +167,10 @@ def train(model, imgs_train, imgs_mask_train, imgs_test, imgs_mask_test, model_n
     test_generator = combine_generator(datagen_val, datagen_val_mask)#zip(datagen_val, datagen_val_mask)
 
     print(train_generator)
-    model.fit_generator(train_generator,
-                             steps_per_epoch=iter_per_epoch, epochs=train_epochs, 
-                             validation_data=test_generator,
-                             validation_steps=val_steps, callbacks=lcallbacks, verbose=verbosity)
+    model.fit(train_generator,
+                steps_per_epoch=iter_per_epoch, epochs=train_epochs, 
+                validation_data=test_generator,
+                validation_steps=val_steps, callbacks=lcallbacks, verbose=verbosity)
 
 def get_unet(lrate, img_rows=512, img_cols=512, dr_rate=0.5, diceloss=False, jaccardloss=False, focalloss=False, customloss=False, start_filters=8):
     inputs = Input((img_rows, img_cols, MEMORY))
